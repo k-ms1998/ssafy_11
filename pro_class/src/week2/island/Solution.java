@@ -69,46 +69,50 @@ class UserSolution
             for(int idx = 0; idx < qSize; idx++) {
                 int curNum = queue.poll();
                 for(int num = 1; num <= 5; num++) {
+                    /*
+                    설치 가능한 mStructure를 만들기
+                    [1]인 구조물의 key 값 -> 1
+                    [1,5,4]인 구조물의 key 값 -> 154
+                     */
                     int nextNum = 10*curNum + num;
                     queue.offer(nextNum);
                     int tmpNum = nextNum;
                     int[] arr = new int[l + 1];
 
+                    /*
+                    key 값을 기준으로 다시 구조물을 만들기
+                     */
                     for(int arrIdx = 0; arrIdx < l + 1; arrIdx++) {
                         arr[l - arrIdx] = tmpNum % 10;
                         tmpNum /= 10;
                     }
-//            		System.out.println("nextNum=" + nextNum);
-//            		for(int arrIdx = 0; arrIdx < l + 1; arrIdx++) {
-//            			System.out.print(arr[arrIdx] + " ");
-//            		}
-//            		System.out.println();
+                    
                     for(int row = 0; row < size; row++) {
                         for(int col = 0; col < size; col++) {
                             int cnt1 = 1;
                             int cnt2 = 1;
-                            int target1 = island[row][col] + arr[0];
+                            int target1 = island[row][col] + arr[0]; // 첫 번째 좌표에 구조물을 놓았을떄 만들어지는 높이
                             int target2 = island[row][col] + arr[0];
                             for(int d = 1; d < l + 1; d++) {
                                 if(col + d < size) {
                                     int h1 = island[row][col + d] + arr[d];
                                     if(h1 == target1) {
-                                        cnt1++;
+                                        cnt1++; // // 첫번째 좌표의 높이가 같을때
                                     }
                                 }
                                 if(row + d < size) {
                                     int h2 = island[row + d][col] + arr[d];
                                     if(h2 == target2) {
-                                        cnt2++;
+                                        cnt2++; // 첫번째 좌표의 높이가 같을때
                                     }
                                 }
                             }
 
-                            if(cnt1 == l + 1) {
-                                candidatesH[nextNum].add(new Point(col, row, -1));
+                            if(cnt1 == l + 1) { // 첫번째 좌표의 높이가 같은 좌표의 갯수가 l+1개 -> 구조물을 가로로 놓았을때의 모든 좌표들의 높이가 같다
+                                candidatesH[nextNum].add(new Point(col, row, -1)); // 현재 구조물을 (col, row)의 좌표에 가로로 놓을 수 있다
                             }
-                            if(cnt2 == l + 1) {
-                                candidatesV[nextNum].add(new Point(col, row, -1));
+                            if(cnt2 == l + 1) { // 첫번째 좌표의 높이가 같은 좌표의 갯수가 l+1개 -> 구조물을 세로로 놓았을때의 모든 좌표들의 높이가 같다
+                                candidatesV[nextNum].add(new Point(col, row, -1)); // 현재 구조물을 (col, row)의 좌표에 세로로 놓을 수 있다
                             }
                         }
                     }
@@ -432,7 +436,7 @@ class Solution {
         BufferedReader br = new BufferedReader(
                 new InputStreamReader(
                         new FileInputStream(
-                                new File("src/week2/island/sample_input.txt"))));
+                                new File("C:\\Users\\pies6\\Desktop\\ssafy_git\\ssafy_11\\pro_class\\src\\week2\\island\\sample_input.txt"))));
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
 
         TC = Integer.parseInt(st.nextToken());
